@@ -1,0 +1,55 @@
+#include<stdio.h>
+void minmax(int a[],int i,int j,int *fmax,int *fmin)
+{
+	int m,gmax,gmin,hmax,hmin;
+	if(i==j)
+	{
+		*fmax=a[i];
+		*fmin=a[i];
+		return ;
+	}
+	if(i==j-1)
+	{
+		*fmax=max(a[i],a[j]);
+		*fmin=min(a[i],a[j]);
+		return ;
+	}
+	else
+	{
+	m=(i+j)/2;
+	minmax(a,i,m,&gmax,&gmin);
+	minmax(a,m+1,j,&hmax,&hmin);
+	*fmax=max(gmax,hmax);
+	*fmin=min(gmin,hmin);
+	return ;
+	}
+}
+int max(int a,int b)
+{
+	if(a>b)
+	return a;
+	else
+	return b;
+}
+int min(int a,int b)
+{
+	if(a<b)
+	return a;
+	else
+	return b;
+}
+void main()
+{
+	int i,n,rmax,rmin;
+	int arr[100];
+	printf("Enter the no of elements : ");
+	scanf("%d",&n);
+	printf("\nthe elements are : ");
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&arr[i]);
+	}
+	minmax(arr,0,n-1,&rmax,&rmin);
+	printf("\nthe result of the maximum is %d",rmax);
+	printf("\nthe result of the minimum is %d",rmin);
+}
