@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 10
+typedef struct stack
+{
+    int s[MAX];
+    int tos;
+}stack;
+
+void push(stack *t, int ele)
+{
+    t->s[++t->tos]=ele;
+}
+
+int isempty(stack *t)
+{
+    if(t->tos==-1)
+        return 1;
+    else return 0;
+}
+
+int pop(stack *t)
+{
+    int z;
+    if(isempty(t))
+    {
+        printf("Stack Underflow\n");
+        return -1;
+    }
+    z=t->s[t->tos+1];
+    t->tos--;
+    return z;
+}
+
+int stacktop(stack *t)
+{
+    return(t->s[t->tos]);
+}
+ void display(stack *t)
+ {
+     int i;
+     for(i=t->tos;i>=0;i--)
+       {
+         if(t->s[i] >=0 && t-> s[i]<=9)
+            printf("%d",t->s[i]);
+         else
+           {
+            switch(t->s[i])
+              {
+                case 10: printf("A");
+                        break;
+                case 11: printf("B");
+                        break;
+                case 12: printf("C");
+                        break;
+                case 13: printf("D");
+                        break;
+                case 14: printf("E");
+                        break;
+                case 15: printf("F");
+                        break;
+             }
+           }
+        }
+        printf("\n");
+    }
+
+void convert(int in, int base)
+{
+    stack x;
+    x.tos=-1;
+    while(in)
+    {
+        push(&x,in%base);
+        in/=base;
+    }
+    display(&x);
+}
+
+
+void main()
+{
+    int in,ch;
+    printf("Enter the number to be converted\n");
+    scanf("%d",&in);
+    while(1)
+    {
+      printf("Enter your choice\n");
+      printf("1:Binary conversion\n2:Octal conversion\n3:Hexadecimal Conversion\n4:New Number\n5:Exit\n");
+      scanf("%d",&ch);
+      if(ch==5)
+        break;
+    switch(ch)
+    {
+
+    case 1:printf("Binary is ");
+           convert(in,2);
+            break;
+    case 2:printf("octal is ");
+           convert(in,8);
+            break;
+    case 3:printf("Hexadecimal  is ");
+           convert(in,16);
+            break;
+    case 4:printf("\nEnter the no to be converted\n");
+           scanf("%d",&in);
+            break;
+    default:printf("Invalid choice\n");
+    }
+  }
+}
