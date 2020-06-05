@@ -1,0 +1,164 @@
+#include<stdio.h>
+#define inf 32767
+int q[100],v1;
+
+typedef struct dijkstra
+{
+ int u,v,wt;
+}dijkstra;
+
+int min(int d[])
+{
+    int m,j=1,k,l=q[1];
+    m=d[l];
+    for(int i=2;i<=v1;i++)
+    {
+        l=q[i];
+        if(d[l]<m)
+        {
+            m=d[l];
+            j=i;
+        }
+    }
+    k=q[j];
+    for(int i=j;i<v1;i++)
+    {
+        q[i]=q[i+1];
+    }
+    v1--;
+    return(k);
+}
+
+
+int adj(int uk,dijkstra x[],int y[],int n,int z[])
+{
+ int j=1,k=0;
+ for(int i=1;i<=n;i++)
+ {
+  if(x[i].u==uk)
+  {
+   y[j]=x[i].v;
+   z[j]=i;
+   j++;
+   k++;
+  }
+  if(x[i].v==uk)
+        {
+            y[j]=x[i].u;
+   z[j]=i;
+   j++;
+   k++;
+        }
+ }
+ return k;
+}
+
+
+int check(int e)
+{
+    for(int i=1;i<=v1;i++)
+    {
+        if(e==q[i])
+            return 1;
+    }
+    return 0;
+}
+
+
+int check1(int y[],int z[],int n1)
+{
+    int k=n1;
+    for(int i=1;i<=n1;i++)
+    {
+        if(check(y[i])!=1)
+        {
+            for(int j=i;j<n1;j++)
+            {
+                y[j]=y[j+1];
+                z[j]=z[j+1];
+            }
+            k--;
+        }
+    }
+    return k;
+}
+
+
+
+
+
+void dijkstras(dijkstra x[],int r,int n)
+{
+ int d[100],py[100],uk,y[100],z[100],e,n1,uv,n2=v1,n3,cost=0,ver,path[100],k;
+ for(int i=1;i<=n2;i++)
+ {
+  d[i]=inf;
+  py[i]=-1;
+ }
+ d[r]=0;
+ while(v1!=0)
+ {
+  uk=min(d);
+  n1=adj(uk,x,y,n,z);
+  n1=check1(y,z,n1);
+  n3=1;
+  e=y[n3];
+  uv=z[n3];
+  while(n3<=n1&&check(e))
+  {
+            if((d[uk]+x[uv].wt)<d[e])
+            {
+                d[e]=d[uk]+x[uv].wt;
+                py[e]=uk;
+            }
+            n3++;
+            e=y[n3];
+            uv=z[n3];
+  }
+ }
+ printf("Enter the end vertex:");
+ scanf("%d",&ver);
+ k=1;
+ path[k]=ver;
+ while(py[ver]!=-1)
+    {
+        path[++k]=py[ver];
+        ver=py[ver];
+    }
+    printf("SHORTEST PATH:");
+    for(int i=k;i>=1;i--)
+    {
+        if(i==1)
+        {
+            printf("%d\n",path[i]);
+        }
+        else
+        {
+            printf("%d-",path[i]);
+        }
+    }
+    ver=path[1];
+    printf("COST=%d",d[ver]);
+}
+void main()
+{
+ int r,n,i;
+ dijkstra x[100];
+ printf("Enter the no. of vertices:");
+ scanf("%d",&v1);
+ printf("Enter the vertices:");
+ for(i=1;i<=v1;i++)
+ {
+  scanf("%d",&q[i]);
+ }
+ printf("Enter the no. of edges:");
+ scanf("%d",&n);
+ printf("Enter the Edge and Weight:");
+ for(i=1;i<=n;i++)
+ {
+  scanf("%d %d %d",&x[i].u,&x[i].v,&x[i].wt);
+ }
+ printf("Enter the starting vertex:");
+ scanf("%d",&r);
+ dijkstras(x,r,n);
+}
