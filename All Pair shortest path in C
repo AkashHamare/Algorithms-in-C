@@ -1,0 +1,148 @@
+#include<stdio.h>
+#define INF 32767
+
+
+int check(int C[][10],int x,int y)
+{
+        if(C[x][y]==INF)
+                return 1;
+        else
+                return 0;
+}
+
+
+void allpair(int A[][10],int d[][10],int n)
+{
+        int v1,v2,x[10],path[10],C[10][10],hidden[10],ck=1,f=0,q=0,hp;
+        for(int i=1;i<=n;i++)
+        {
+                for(int j=1;j<=n;j++)
+                {
+                        C[i][j]=A[i][j];
+                }
+        }
+        for(int k=1;k<=n;k++)
+        {
+                for(int i=1;i<=n;i++)
+                {
+                        for(int j=1;j<=n;j++)
+                        {
+                                if(A[i][j]>(A[i][k]+A[k][j]))
+                                {
+                                        A[i][j]=A[i][k]+A[k][j];
+                                        d[i][j]=k;
+                                }
+                        }
+                }
+        }
+        printf("matrix A");
+        for(int i=1;i<n;i++)
+        {
+            printf("\t");
+        }
+        printf("matrix D\n");
+        for(int i=1;i<=n;i++)
+        {
+                for(int j=1;j<=n;j++)
+                {
+                        printf("%d\t",A[i][j]);
+                }
+                printf("|\t");
+                for(int j=1;j<=n;j++)
+                {
+                        printf("%d\t",d[i][j]);
+                }
+                printf("\n");
+        }
+
+        while(1)
+        {
+                printf("Enter the path to be Found:");
+                scanf("%d %d",&v1,&v2);
+                x[0]=v2;
+                f=v2;
+                while(f!=v1)
+                {
+                        x[++q]=d[v1][f];
+                        f=d[v1][f];
+                        if(f==-1)
+                                break;
+                }
+                for(int i=0;i<=q;i++)
+                {
+                    path[i]=x[q-i];
+                }
+                for(int i=0;i<q;i++)
+                {
+                        if(check(C,path[i],path[i+1]))
+                        {
+                            hidden[1]=path[i+1];
+                            f=path[i+1];
+                            hp=path[i];
+                            while(f!=path[i])
+                            {
+                                hidden[++ck]=d[hp][f];
+                                f=d[hp][f];
+                                if(f==-1)
+                                    break;
+                            }
+
+                            for(int j=1;j<=ck/2;j++)
+                            {
+                                int temp=hidden[j];
+                                hidden[j]=hidden[ck-j+1];
+                                hidden[ck-j+1]=temp;
+                            }
+
+                            for(int j=i;j<=q;j++)
+                            {
+                                path[j+ck]=path[j+2];
+                            }
+                            for(int j=i;j<=ck;j++)
+                            {
+                                path[j]=hidden[j];
+                            }
+                            q=q+ck-2;
+                        }
+                }
+                for(int i=0;i<=q;i++)
+                {
+                        printf("%d ",path[i]);
+                }
+                q=0;
+        }
+}
+
+
+void main()
+{
+        int A[10][10],d[10][10],n,e,cost,v1,v2;
+        printf("Enter the no. of vertices:");
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++)
+        {
+                for(int j=1;j<=n;j++)
+                {
+                        A[i][j]=INF;
+                        A[i][i]=0;
+                }
+        }
+        for(int i=1;i<=n;i++)
+        {
+                for(int j=1;j<=n;j++)
+                {
+                        d[i][j]=-1;
+                }
+        }
+        printf("Enter the no. of edges:");
+        scanf("%d",&e);
+        printf("Enter the Edges and its Cost:\n");
+        for(int i=1;i<=e;i++)
+        {
+                scanf("%d %d %d",&v1,&v2,&cost);
+                A[v1][v2]=cost;
+                d[v1][v2]=v1;
+        }
+
+        allpair(A,d,n);
+}
