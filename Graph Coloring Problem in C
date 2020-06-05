@@ -1,0 +1,59 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int x[20],n,c,board[20],m,adj[20][20];
+void nextvalue(int k)
+{
+    step2:
+        x[k]=(x[k]+1)%(m+1);
+        if(x[k]==0)
+            return;
+        for(int j=1;j<=k-1;j++)
+        {
+            if(x[k]==x[j] && adj[k][j]==1)
+                goto step2;
+        }
+        return;
+}
+void colorgraph(int k)
+{
+    step2:
+        nextvalue(k);
+        if(x[k]==0)
+        {
+            return;
+        }
+        if(k==n)
+        {
+            printf("\nSolution %d:\nnodes:",++c);
+            for(int i=1;i<=n;i++)
+            {
+                    printf("\t%d ",i);
+            }
+            printf("\ncolor:");
+            for(int i=1;i<=n;i++)
+            {
+                printf("\t%d ",x[i]);
+            }
+            printf("\n");
+        }
+        else colorgraph(k+1);
+        goto step2;
+}
+void main()
+{
+    int e,e1,e2;
+    c=0;
+    printf("Enter no. of node & no. of colors & edges :\n");
+    scanf("%d %d %d",&n,&m,&e);
+    printf("Enter edges:\n");
+    for(int i=0;i<e;i++)
+    {
+        scanf("%d %d",&e1,&e2);
+        adj[e1][e2]=adj[e2][e1]=1;
+    }
+
+    for(int i=1;i<=n;i++)
+        x[i]=0;
+    colorgraph(1);
+}
