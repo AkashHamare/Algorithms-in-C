@@ -1,0 +1,85 @@
+#include<stdio.h>
+#include<math.h>
+#include<stdlib.h>
+
+int n;
+
+void nextvalue(int k,int x[])
+{
+	int j;
+	step2:x[k]=(x[k]+1)%(n+1);
+	if(x[k]==0)
+		return;
+	else
+		for(j=1;j<k;j++)
+		{
+		if(x[k]==x[j] || abs(x[k]-x[j])==abs(k-j))
+			goto step2;
+		}
+	return;
+}
+
+void display(char matrix[][10])
+{
+    int i,j;
+     for(i=1;i<=n;i++)
+		 {
+
+		     for(j=1;j<=n;j++)
+         {
+             printf("| %c ",matrix[i][j]);
+         }
+        printf("\n");
+        }
+}
+
+void nqueens(int k)
+{
+	static int x[10],i,z=1,j,asach;
+	char matrix[10][10];
+	step1:nextvalue(k,x);
+	if (x[k]==0)
+		return;
+	if (k==n)
+	{
+	printf("The solution number %d is : ",z);
+	for(i=1;i<=n;i++)
+		{
+		printf("%d",x[i]);
+
+		}
+	 printf("\n\n");
+
+    for(i=1;i<=n;i++)
+		 for(j=1;j<=n;j++)
+         {
+             matrix[i][j]='-';
+         }
+
+	 for(i=1;i<=n;i++)
+		{
+
+		 asach=x[i];
+		 matrix[i][asach]='Q';
+
+		}
+		display(matrix);
+        z++;
+        printf("\n\n");
+	}
+	else
+		nqueens(k+1);
+	goto step1;
+}
+
+
+void main()
+{
+	int i,j,k;
+
+	printf("enter the number of queens : ");
+	scanf("%d",&n);
+
+	nqueens(1);
+
+}
