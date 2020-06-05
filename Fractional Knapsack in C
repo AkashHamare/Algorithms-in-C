@@ -1,0 +1,84 @@
+#include<stdio.h>
+
+void sort(float p[],float w[],int n,float pw[],int y[])
+{
+
+   int i, j,t;
+   float t2;
+   for (i = 0; i < n; i++)
+   {
+       for (j = i+1; j < n; j++)
+       {
+            if (pw[i]<pw[j])
+            {
+                t=y[i];
+                y[i]=y[j];
+                y[j]=t;
+                t2=p[i];
+                p[i]=p[j];
+                p[j]=t2;
+                t2=w[i];
+                w[i]=w[j];
+                w[j]=t2;
+                t2=pw[i];
+                pw[i]=pw[j];
+                pw[j]=t2;
+
+
+            }
+       }
+
+   }
+}
+
+void knapsack(float p[],float w[],int n,int max,int y[],float pw[],float x[])
+{
+    float cp,cw;
+    cp=cw=0.0;
+    sort(p,w,n,pw,y);
+    for(int i=0;i<n;i++)
+    {
+        if(cw+w[i]<max)
+        {
+            x[i]=1;
+            cp+=p[i];
+            cw+=w[i];
+        }
+        else
+        {
+            x[i]=(max-cw)/w[i];
+            cp=cp+p[i]*x[i];
+            cw=max;
+        }
+    }
+    printf("\nThe final Profit is %0.2f\n",cp);
+}
+void main()
+{
+    int n,max,y[100];
+    float p[100],w[100];
+    float x[100],pw[100];
+    printf("Enter no. of items:");
+    scanf("%d",&n);
+    printf("Enter max sack capacity:");
+    scanf("%d",&max);
+    printf("\n");
+    for(int i=0;i<n;i++)
+    {
+        x[i]=0;
+        y[i]=i+1;
+        printf("Enter profit and weight for %d: ",i+1);
+        scanf("%f %f",&p[i],&w[i]);
+        pw[i]=p[i]/w[i];
+    }
+    knapsack(p,w,n,max,y,pw,x);
+    printf("\nThe final list of item usage is\n");
+
+       for(int i=0;i<n;i++)
+    {
+        printf("(%d)%0.2f\n",y[i],x[i]);
+    }
+
+    printf("\n");
+}
+
