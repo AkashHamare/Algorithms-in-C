@@ -1,0 +1,76 @@
+#include<stdio.h>
+typedef struct input
+{
+	int j;
+	int p;
+	int d;
+}ip;
+typedef struct schedule
+{
+	int jobno,flag;
+}sc;
+ip x[20];
+sc s[20];
+int getSlot(int dl)
+{
+	int i;
+	for(i=dl-1;i>=0;i--)
+	{
+		if(s[i].flag==0)
+			return i;
+	}
+	return -1;
+}
+void jobsequencing(int k,int n)
+{
+	int profit=0,i,avail;
+	for(i=0;i<n;i++)
+	{
+		avail=getSlot(x[i].d);
+
+		if(avail==-1)
+		{
+			printf("Job %d cannot be scheduled.\n",x[i].j);
+		}
+		else
+		{
+			s[avail].flag=1;
+			s[avail].jobno=x[i].j;
+			profit=profit+x[i].p;
+			printf("Job %d is scheduled in slot %d.\n",x[i].j,avail);
+		}
+	}
+	printf("\nTotal profit = %d.\n",profit);
+}
+void main()
+{
+	ip t;
+	int i,a,n,k;
+	printf("Enter number of jobs : ");
+	scanf("%d",&n);
+	k=0;
+	printf("Enter (job number/Profit/deadline):\n");
+	for(i=0;i<n;i++)
+	{
+
+		scanf("%d %d %d",&x[i].j,&x[i].p,&x[i].d);
+
+		if(x[i].d>k)
+			k=x[i].d;
+	}
+	printf("\n");
+	for(i=0;i<n-1;i++)
+	{
+		for(a=0;a<n-1;a++)
+		{
+			if(x[a].p<x[a+1].p)
+			{
+				t=x[a];
+				x[a]=x[a+1];
+				x[a+1]=t;
+			}
+		}
+	}
+	jobsequencing(k,n);
+}
+
